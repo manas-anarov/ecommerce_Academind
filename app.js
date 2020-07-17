@@ -1,19 +1,39 @@
-var express = require('express');
+const express = require('express');
+const morgan = require('morgan');
 
-var app = express();
-const productsRoutes = require('./api/routes/products');
+const app = express();
 const ordersRoutes = require('./api/routes/orders');
 
+const productsRoutes = require('./api/routes/products');
 
+
+app.use(morgan('dev'));
 app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);
 
 
-// app.use((req, res, next) =>{
-// 	res.status(200).json({
-// 		message:'its Works'
-// 	});
-// });
+
+app.use((req, res, next) =>{
+
+	const error = new Error('Not found');
+	error.status = 404;
+	next(error);
+
+});
+
+
+app.use((error, req, res, next) =>{
+
+	res.status(error.status || 500);
+	next(error);
+
+	res.json({
+		error: {
+			message: error.message
+		}
+	});
+
+});
 
 
 
