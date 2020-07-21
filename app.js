@@ -1,18 +1,29 @@
-const express = require('express');
+var express = require('express');
+var bodyParser = require('body-parser');
 const morgan = require('morgan');
+var app = express();
+const cors = require('cors');
+const mongoose = require('mongoose');
 
-const app = express();
 
-const bodyParser = require('body-parser');
+
+
+
+mongoose.connect(
+	'mongodb+srv://userNode:' + process.env.MONGO_ATLAS_PW + '@cluster0.ztm3j.mongodb.net/CluserO?retryWrites=true&w=majority', 
+	{ useNewUrlParser: true,  useUnifiedTopology: true}
+);
+
+app.use(cors());
+
+app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+// app.use(bodyParser.json());
 
 
 const ordersRoutes = require('./api/routes/orders');
 const productsRoutes = require('./api/routes/products');
-
-
-app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
 
 app.use((req, res, next)=>{
 	res.header('Access-Control-Allow-Origin', '*');
