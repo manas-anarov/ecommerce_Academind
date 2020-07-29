@@ -1,72 +1,51 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-const morgan = require('morgan');
-var app = express();
-const cors = require('cors');
+const express = require('express');
+
+const app = express();
 const mongoose = require('mongoose');
-
-
-
-
-
-mongoose.connect(
-	'mongodb+srv://userNode:' + process.env.MONGO_ATLAS_PW + '@cluster0.ztm3j.mongodb.net/CluserO?retryWrites=true&w=majority', 
-	{ useNewUrlParser: true,  useUnifiedTopology: true}
-);
-
-// app.use(cors());
-
-app.use(morgan('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-// app.use(bodyParser.json());
-
-
-
-app.use((req, res, next)=>{
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header(
-		"Access-Control-Allow-Headers", 
-		"Origin, X-Requested-With, Content-Type, Accept, Authorization"
-	);
-	if (req.method  === "OPTIONS"){
-		res.header("Access-Control-Allow-Methods", 'PUT, POST, PATCH, DELETE, GET');
-		return res.status(200).json({});
-	}
-	next();
-});
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const ordersRoutes = require('./api/routes/orders');
 const productsRoutes = require('./api/routes/products');
+
+
+app.use(cors());
+
+app.use(bodyParser.json());
+
+
 
 
 app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);
 
 
+// mongodb+srv://<username>:<password>@cluster0.5joob.mongodb.net/<dbname>?retryWrites=true&w=majority
 
-app.use((req, res, next) =>{
+// mongoose.connect('mongodb+srv://userNode:' + process.env.MONGO_ATLAS_PW + '@cluster0.ztm3j.mongodb.net/CluserO?retryWrites=true&w=majority',
+// 	{ useNewUrlParser: true,  useUnifiedTopology: true}, () =>{
+// 		console.log('salam')
+// 	}
+// );
 
-	const error = new Error('Not found');
-	error.status = 404;
-	next(error);
 
+// 'mongodb+srv://userNode:1993Node2020Snoop@cluster0.ztm3j.mongodb.net/CluserO?retryWrites=true&w=majority'
+
+
+mongoose.connect('mongodb+srv://samuray:' + 'samuray' + '@cluster0.5joob.mongodb.net/CluserO?retryWrites=true&w=majority',
+	{ useNewUrlParser: true,  useUnifiedTopology: true}, () =>{
+		console.log('salam')
+	}
+);
+
+mongoose.Promise = global.Promise;
+
+//roures
+app.get('/', (req,res) =>{
+	res.send('Флаттерчилерге салам');
 });
 
 
-app.use((error, req, res, next) =>{
-
-	res.status(error.status || 500);
-	next(error);
-
-	res.json({
-		error: {
-			message: error.message
-		}
-	});
-
-});
 
 
-
-module.exports = app;
+app.listen(3000);

@@ -6,3 +6,4 @@ yarn add morgan;
 yarn add body-parser;
 
 yarn add mongoose;
+yarn add @types/node;
