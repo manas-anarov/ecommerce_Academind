@@ -7,7 +7,7 @@ const cors = require('cors');
 
 const ordersRoutes = require('./api/routes/orders');
 const productsRoutes = require('./api/routes/products');
-
+app.use('/uploads',express.static('uploads'))
 
 app.use(cors());
 
